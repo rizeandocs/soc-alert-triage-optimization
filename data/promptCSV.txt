@@ -1,0 +1,30 @@
+DATA GENERATION PROMPT (LLM: Claude)
+
+I'm optimizing alert triage for CrowdStrike's Falcon Complete managed detection and
+response (SOC) service. I have two decision variables:
+
+1. alert_threshold: 10 to 100 in steps of 10 (10 levels). Alerts scoring below the
+   threshold are not sent to an analyst.
+2. analysts_per_shift: 3 to 12 (10 levels), with 3 shifts per day for 24/7 coverage.
+
+Generate a CSV with all 100 combinations (10 x 10) showing how detection coverage and
+labor cost respond to these variables.
+
+Columns: alert_threshold, analysts_per_shift, alerts_per_day, detection_rate,
+false_positive_rate, avg_triage_minutes, avg_critical_response_minutes, daily_labor_cost
+
+Patterns to reflect:
+- Lower thresholds create many more alerts, mostly false positives.
+- Higher thresholds miss more real attacks, so detection_rate falls.
+- Each analyst triages about 12 alerts per hour (5 minutes per alert). When alerts exceed
+  capacity, detection drops and response time grows.
+- daily_labor_cost depends only on staffing.
+- Some combinations should be clearly worse than others (more cost and less detection).
+
+SOURCES FOR ASSUMPTIONS
+- 5 minutes per alert (12 per hour): CrowdStrike Charlotte AI Detection Triage press
+  release, Feb 13, 2025.
+- $73 per hour: midpoint of the $125,000-$180,000 salary in the CrowdStrike "Sr. Analyst,
+  Falcon Complete (Remote)" posting (Monster, Oct 27, 2026) divided by 2,080 hours.
+- Weekend shifts: same posting.
+- 40 malicious alerts per day and 6.5 productive hours per shift: assumptions.
